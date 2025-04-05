@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - XYZ Audio Server</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1>Dashboard - XYZ Audio Server</h1>
+    <table border="1" cellspacing="0" cellpadding="5">
+        <thead>
+            <tr>
+                <th>Estación</th>
+                <th>Estado</th>
+                <th>Timestamp</th>
+                <th>Detalle</th>
+                <th>Similaridad</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+            <tr>
+                <td>{{ event.estacion }}</td>
+                <td>{{ event.estado }}</td>
+                <td>{{ event.timestamp }}</td>
+                <td>{{ event.detalle }}</td>
+                <td>{{ event.similarity }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
