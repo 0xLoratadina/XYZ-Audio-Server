@@ -8,112 +8,208 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
   <style>
+    :root {
+      --primary-color: #6c5ce7;
+      --primary-hover: #5a4dc2;
+      --danger-color: #6c5ce7;  /* Cambiado a morado */
+      --danger-hover: #5a4dc2;  /* Cambiado a morado oscuro */
+      --bg-color: #f5f7fb;
+      --card-bg: #fff;
+      --text-color: #333;
+      --border-color: #eaeaea;
+      --sidebar-width: 250px;
+    }
+    
     body {
-      background-color: #f5f7fb;
+      background-color: var(--bg-color);
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       overflow-x: hidden;
       margin: 0;
+      padding-top: 56px;
+      color: var(--text-color);
     }
+    
+    /* Navbar estático */
     .navbar {
-      background-color: #fff;
-      border-bottom: 1px solid #eaeaea;
+      background-color: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
       padding: 0.75rem 1.5rem;
       z-index: 1100;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
+    
     .navbar-brand {
-      color: #6c5ce7 !important;
+      color: var(--primary-color) !important;
       font-weight: 700;
       font-size: 1.5rem;
       text-decoration: none;
     }
+    
     .navbar-text {
       font-weight: 500;
-      color: #333;
     }
+    
+    /* Sidebar */
     .sidebar {
-      width: 250px;
-      background-color: #fff;
-      min-height: 100vh;
-      border-right: 1px solid #eaeaea;
+      width: var(--sidebar-width);
+      background-color: var(--card-bg);
+      min-height: calc(100vh - 56px);
+      border-right: 1px solid var(--border-color);
       position: fixed;
       top: 56px;
       left: 0;
       padding: 1rem;
-      padding-top: 50px;
+      padding-top: 35px;
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
       z-index: 1000;
+      transition: all 0.3s ease;
     }
+    
     .sidebar .nav-link {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      color: #333;
+      color: var(--text-color);
       font-weight: 500;
       border-radius: 8px;
       text-decoration: none;
       padding: 0.5rem 1rem;
+      transition: all 0.2s;
     }
-    .sidebar .nav-link:hover {
-      background-color: #f0f0f0;
-      color: #6c5ce7;
+    
+    .sidebar .nav-link:hover, .sidebar .nav-link.active {
+      background-color: rgba(108, 92, 231, 0.1);
+      color: var(--primary-color);
     }
+    
+    /* Contenido principal */
     .main-content {
-      margin-left: 250px;
+      margin-left: var(--sidebar-width);
       margin-top: 20px;
       padding: 1rem 3rem;
+      transition: all 0.3s ease;
     }
+    
+    /* Tarjetas de estadísticas */
     .stats-card {
-      background: #fff;
+      background: var(--card-bg);
       border-radius: 12px;
       padding: 1.5rem;
       box-shadow: 0 1px 4px rgba(0,0,0,0.1);
       text-align: center;
+      height: 100%;
     }
+    
     .stats-card h5 {
       margin-bottom: 0.5rem;
+      color: #666;
+      font-size: 1rem;
     }
+    
     .stats-card p {
-      font-size: 1.4rem;
+      font-size: 1.8rem;
       font-weight: bold;
       margin: 0;
+      color: var(--primary-color);
     }
-    /* Tarjeta de estación con flex column */
+    
+    /* Tarjetas de estación */
     .station-card {
       display: flex;
       flex-direction: column;
       height: 100%;
       border-radius: 12px;
       box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-      background-color: #fff;
+      background-color: var(--card-bg);
       padding: 1.5rem;
+      transition: transform 0.2s;
     }
+    
+    .station-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
     .card-content {
-      /* Contenedor de la parte media */
       margin-bottom: 1rem;
     }
+    
     .station-card .card-header {
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid var(--border-color);
       padding-bottom: 1rem;
       margin-bottom: 1rem;
       display: flex;
       align-items: center;
     }
+    
     .station-card .station-logo {
       width: 60px;
-      height: auto;
+      height: 60px;
+      object-fit: cover;
       border-radius: 8px;
       margin-right: 1rem;
     }
-    /* Botones al fondo de la tarjeta */
+    
+    .station-card .no-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      margin-right: 1rem;
+      background-color: #eee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+    }
+    
+    /* Botones */
     .actions {
       margin-top: auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
     }
-    .actions .btn {
-      margin-right: 0.4rem;
-      margin-bottom: 0.4rem;
+    
+    .btn {
+      border-radius: 8px;
+      padding: 0.375rem 0.75rem;
+      font-weight: 500;
+      transition: all 0.2s;
     }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      border: none;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+    
+    .btn-outline-dark {
+      border: 1px solid var(--border-color);
+    }
+    
+    .btn-outline-dark:hover {
+      background-color: #f8f9fa;
+    }
+    
+    .btn-danger {
+      background-color: var(--danger-color);
+      border: none;
+    }
+    
+    .btn-danger:hover {
+      background-color: var(--danger-hover);
+    }
+    
+    /* Audio player */
     .audio-row {
       display: none;
       margin-top: 1rem;
@@ -121,32 +217,86 @@
       padding: 0.8rem;
       border-radius: 8px;
     }
-    .btn-outline-dark, .btn-primary, .btn-danger {
-      border-radius: 8px;
+    
+    /* Botón de cerrar sesión */
+    .logout-btn {
+      margin-top: auto;
+      margin-bottom: 1rem;
     }
-    .btn-primary {
-      background-color: #6c5ce7;
+    
+    .logout-btn .btn {
+      width: 100%;
+      background-color: var(--danger-color); /* Color morado */
+      color: white;
       border: none;
     }
-    .btn-primary:hover {
-      background-color: #5a4dc2;
+    
+    .logout-btn .btn:hover {
+      background-color: var(--danger-hover); /* Color morado oscuro */
+    }
+    
+    /* Modal */
+    .modal-content {
+      border-radius: 12px;
+      border: none;
+    }
+    
+    /* Responsive */
+    @media (max-width: 992px) {
+      :root {
+        --sidebar-width: 220px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      
+      .sidebar.show {
+        transform: translateX(0);
+      }
+      
+      .main-content {
+        margin-left: 0;
+      }
+      
+      .navbar-toggler {
+        display: block;
+      }
     }
   </style>
 </head>
 <body>
-  <nav class="navbar navbar-light">
+  <!-- Navbar estático -->
+  <nav class="navbar navbar-light fixed-top">
     <div class="container-fluid d-flex justify-content-between align-items-center">
+      <button class="navbar-toggler d-md-none" type="button" onclick="toggleSidebar()">
+        <span class="navbar-toggler-icon"></span>
+      </button>
       <a class="navbar-brand" href="#">RadioStatus</a>
       <span class="navbar-text">Hola, {{ session['user_id'] }}!</span>
     </div>
   </nav>
-  <div class="sidebar">
-    <a class="nav-link" href="#"><i class="fas fa-home"></i>Inicio</a>
+  
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <a class="nav-link active" href="#"><i class="fas fa-home"></i>Inicio</a>
     <a class="nav-link" href="#"><i class="fas fa-chart-line"></i>Estadísticas</a>
     <a class="nav-link" href="#"><i class="fas fa-headphones"></i>Estaciones</a>
     <a class="nav-link" href="#"><i class="fas fa-cog"></i>Configuración</a>
+    
+    <!-- Botón de cerrar sesión en color morado -->
+    <div class="logout-btn">
+      <a href="{{ url_for('main.logout') }}" class="btn">
+        <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+      </a>
+    </div>
   </div>
-  <div class="main-content">
+  
+  <!-- Contenido principal -->
+  <div class="main-content" id="mainContent">
+    <!-- Estadísticas -->
     <div class="row g-4 mb-4">
       <div class="col-md-4">
         <div class="stats-card">
@@ -167,37 +317,42 @@
         </div>
       </div>
     </div>
+    
+    <!-- Encabezado de estaciones -->
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="mb-0">Estaciones</h5>
+      <h4 class="mb-0">Estaciones</h4>
       <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEstacion">
         <i class="fas fa-plus me-2"></i>Agregar Estación
       </button>
     </div>
+    
+    <!-- Lista de estaciones -->
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
       {% for station in stations %}
       <div class="col">
-        <!-- Tarjeta de estación con flex column -->
         <div class="station-card">
           <div class="card-content">
             <div class="card-header">
               {% if station.logo %}
                 <img src="{{ url_for('static', filename='logos/' ~ station.logo) }}" alt="{{ station.nombre }}" class="station-logo">
               {% else %}
-                <div class="bg-secondary text-white d-flex justify-content-center align-items-center" style="width:60px; height:60px; border-radius:8px; margin-right:1rem;">
-                  N/A
+                <div class="no-logo">
+                  <i class="fas fa-broadcast-tower"></i>
                 </div>
               {% endif %}
               <div>
                 <h5 class="mb-0">{{ station.nombre }}</h5>
+                <small class="text-muted">{{ station.frecuencia }}</small>
               </div>
             </div>
-            <p class="mb-1"><strong>Frecuencia:</strong> {{ station.frecuencia }}</p>
-            <p class="mb-1"><strong>Ciudad:</strong> {{ station.ciudad }}</p>
-            <p class="mb-1"><strong>Estado:</strong> {{ station.estado }}</p>
-            <p class="mb-1"><strong>Interfaz:</strong> {{ station.audio_label if station.audio_label else 'N/A' }}</p>
+            <div class="station-details">
+              <p class="mb-1"><i class="fas fa-map-marker-alt me-2 text-muted"></i> {{ station.ciudad }}, {{ station.estado }}</p>
+              <p class="mb-1"><i class="fas fa-microphone me-2 text-muted"></i> {{ station.audio_label if station.audio_label else 'N/A' }}</p>
+            </div>
           </div>
-          <!-- Sección de botones al fondo -->
-          <div class="actions d-flex flex-wrap align-items-center">
+          
+          <!-- Acciones -->
+          <div class="actions">
             {% if station.audio_interface %}
               <button class="btn btn-sm btn-outline-dark" data-playing="false" onclick="toggleAudio(this, '{{ station.audio_interface }}')">
                 <i class="fas fa-play me-1"></i>Escuchar
@@ -217,6 +372,8 @@
               <i class="fas fa-trash me-1"></i>Eliminar
             </a>
           </div>
+          
+          <!-- Reproductor de audio -->
           <div class="audio-row">
             <div class="d-flex align-items-center">
               <p class="mb-0 me-3">Reproduciendo: {{ station.nombre }}</p>
@@ -228,6 +385,8 @@
       {% endfor %}
     </div>
   </div>
+  
+  <!-- Modal para agregar estación -->
   <div class="modal fade" id="modalEstacion" tabindex="-1" aria-labelledby="modalEstacionLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -270,16 +429,27 @@
       </div>
     </div>
   </div>
+  
+  <!-- Bootstrap Bundle JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Scripts personalizados -->
   <script>
+    // Función para mostrar fecha y hora actual
     function updateDateTime() {
       const now = new Date();
       document.getElementById('currentDateTime').textContent = now.toLocaleString();
     }
     setInterval(updateDateTime, 1000);
     updateDateTime();
-  </script>
-  <script>
+    
+    // Función para alternar el sidebar en móviles
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('show');
+    }
+    
+    // Función para manejar dispositivos de audio
     async function requestAudioPermission() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -288,11 +458,13 @@
         console.log("Permiso de micrófono denegado o error:", err);
       }
     }
+    
     requestAudioPermission().then(() => {
       if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
         navigator.mediaDevices.enumerateDevices().then(function(devices) {
           var select = document.getElementById('audio_interface_select');
           if (!select) return;
+          
           devices.forEach(function(device) {
             if (device.kind === 'audioinput') {
               var option = document.createElement('option');
@@ -301,6 +473,7 @@
               select.appendChild(option);
             }
           });
+          
           select.addEventListener('change', function() {
             var selectedOption = select.options[select.selectedIndex];
             document.getElementById('audio_label_hidden').value = selectedOption.text;
@@ -308,29 +481,31 @@
         });
       }
     });
-  </script>
-  <script>
+    
+    // Función para controlar la reproducción de audio
     let currentStream = null;
     function toggleAudio(btn, deviceId) {
       const playing = (btn.dataset.playing === 'true');
       const card = btn.closest('.station-card');
       const audioRow = card.querySelector('.audio-row');
       const audioElement = audioRow.querySelector('audio');
+      
       if (!playing) {
         audioRow.style.display = 'block';
         audioElement.style.display = 'block';
+        
         navigator.mediaDevices.getUserMedia({ audio: { deviceId: { exact: deviceId } } })
-        .then(stream => {
-          currentStream = stream;
-          audioElement.srcObject = stream;
-          audioElement.play();
-          btn.innerHTML = '<i class="fas fa-stop me-1"></i>Parar';
-          btn.dataset.playing = 'true';
-        })
-        .catch(err => {
-          console.error(err);
-          alert("Error al acceder a la interfaz de audio.");
-        });
+          .then(stream => {
+            currentStream = stream;
+            audioElement.srcObject = stream;
+            audioElement.play();
+            btn.innerHTML = '<i class="fas fa-stop me-1"></i>Parar';
+            btn.dataset.playing = 'true';
+          })
+          .catch(err => {
+            console.error(err);
+            alert("Error al acceder a la interfaz de audio.");
+          });
       } else {
         audioRow.style.display = 'none';
         if (currentStream) {

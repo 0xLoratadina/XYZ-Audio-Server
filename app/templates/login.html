@@ -2,64 +2,113 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Iniciar Sesión</title>
+  <title>Iniciar Sesión - RadioStatus</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Bootstrap 5 CSS y Font Awesome -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
-  
-  <!-- Estilos de ejemplo: Paleta clara con acentos en morado -->
   <style>
-    body {
-      background: #f5f7fb;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    :root {
+      --primary-color: #6c5ce7;
+      --primary-hover: #5a4dc2;
+      --bg-color: #f5f7fb;
+      --card-bg: #fff;
+      --text-color: #333;
+      --border-color: #eaeaea;
     }
-    .card {
+    
+    body {
+      background-color: var(--bg-color);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-color);
+    }
+    
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+    
+    .login-card {
+      width: 100%;
+      max-width: 400px;
       border: none;
       border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      background: var(--card-bg);
+      overflow: hidden;
     }
+    
+    .login-header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    
+    .login-body {
+      padding: 2rem;
+    }
+    
     .btn-primary {
-      background-color: #6c5ce7;
+      background-color: var(--primary-color);
       border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
     }
+    
     .btn-primary:hover {
-      background-color: #5a4dc2;
+      background-color: var(--primary-hover);
     }
+    
+    .form-control {
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+    }
+    
     .logo {
       font-weight: 700;
-      color: #6c5ce7;
+      font-size: 1.8rem;
+      color: white;
       text-decoration: none;
-      font-size: 1.5rem;
+    }
+    
+    .form-label {
+      font-weight: 500;
     }
   </style>
 </head>
 <body>
-  <div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="card shadow p-4" style="max-width: 400px; width: 100%;">
-      <div class="text-center mb-4">
-        <a href="#" class="logo">MiApp</a>
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <a href="#" class="logo">RadioStatus</a>
       </div>
-      <h4 class="mb-3 text-center">Iniciar Sesión</h4>
-      {% if error %}
-        <div class="alert alert-danger">{{ error }}</div>
-      {% endif %}
-      <form method="POST" action="{{ url_for('main.login') }}">
-        <div class="mb-3">
-          <label class="form-label">Usuario</label>
-          <input type="text" name="username" class="form-control" required>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Contraseña</label>
-          <input type="password" name="password" class="form-control" required>
-        </div>
-        <div class="d-grid">
-          <button type="submit" class="btn btn-primary">
-            <i class="fas fa-sign-in-alt me-2"></i>Entrar
-          </button>
-        </div>
-      </form>
-      <div class="mt-3 text-center">
-        <small>¿No tienes cuenta? <a href="{{ url_for('main.register') }}">Regístrate</a></small>
+      <div class="login-body">
+        <h4 class="mb-4 text-center">Iniciar Sesión</h4>
+        {% if error %}
+          <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+        <form method="POST" action="{{ url_for('main.login') }}">
+          <div class="mb-3">
+            <label class="form-label">Usuario</label>
+            <input type="text" name="username" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Contraseña</label>
+            <input type="password" name="password" class="form-control" required>
+          </div>
+          <div class="d-grid mb-3">
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-sign-in-alt me-2"></i>Entrar
+            </button>
+          </div>
+          <div class="text-center">
+            <small>¿No tienes cuenta? <a href="{{ url_for('main.register') }}" class="text-decoration-none">Regístrate</a></small>
+          </div>
+        </form>
       </div>
     </div>
   </div>
