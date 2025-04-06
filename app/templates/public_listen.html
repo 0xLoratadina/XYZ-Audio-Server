@@ -11,6 +11,8 @@
     :root {
       --primary-color: #6c5ce7;
       --primary-hover: #8a7aec;
+      --danger-color: #e74c3c;
+      --danger-hover: #c0392b;
       --bg-color: #f5f7fb;
       --card-bg: #fff;
       --text-color: #333;
@@ -39,10 +41,6 @@
       transition: transform 0.3s ease;
     }
     
-    .listen-card:hover {
-      transform: translateY(-5px);
-    }
-    
     .listen-header {
       padding: 2rem;
       text-align: center;
@@ -68,6 +66,21 @@
       background-color: var(--primary-hover);
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(108, 92, 231, 0.25);
+    }
+    
+    .btn-danger {
+      background-color: var(--danger-color);
+      border: none;
+      border-radius: 12px;
+      padding: 0.75rem 2rem;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    
+    .btn-danger:hover {
+      background-color: var(--danger-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(231, 76, 60, 0.25);
     }
     
     .btn-outline-primary {
@@ -179,8 +192,12 @@
   <!-- Bootstrap Bundle JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    document.getElementById('btn-start-listen').addEventListener('click', function() {
-      const btn = this;
+    // Variable para mantener la referencia al stream de audio
+    let audioStream = null;
+    const btnListen = document.getElementById('btn-start-listen');
+    const audioPlayer = document.getElementById('audio-player');
+    
+    btnListen.addEventListener('click', function() {
       const deviceId = "{{ station.audio_interface }}";
       
       if (!deviceId) {
@@ -188,33 +205,52 @@
         return;
       }
       
+      if (btnListen.innerHTML.includes('Detener')) {
+        // Detener la reproducción
+        stopAudio();
+        return;
+      }
+      
+      // Iniciar la reproducción
       navigator.mediaDevices.getUserMedia({ audio: { deviceId: { exact: deviceId } } })
-      .then(stream => {
-        const audioPlayer = document.getElementById('audio-player');
-        audioPlayer.style.display = 'block';
-        audioPlayer.srcObject = stream;
-        audioPlayer.play();
-        
-        btn.innerHTML = '<i class="fas fa-stop me-2"></i>Detener';
-        btn.classList.remove('btn-primary');
-        btn.classList.add('btn-danger');
-        
-        // Cambiar el comportamiento del botón para detener
-        btn.onclick = function() {
-          audioPlayer.pause();
-          audioPlayer.srcObject = null;
-          stream.getTracks().forEach(track => track.stop());
-          btn.innerHTML = '<i class="fas fa-play me-2"></i>Escuchar';
-          btn.classList.remove('btn-danger');
-          btn.classList.add('btn-primary');
-          btn.onclick = arguments.callee.caller;
-        };
-      })
-      .catch(err => {
-        console.error(err);
-        alert("Error al conectar con la estación. Intente nuevamente.");
-      });
+        .then(stream => {
+          audioStream = stream;
+          audioPlayer.style.display = 'block';
+          audioPlayer.srcObject = stream;
+          audioPlayer.play();
+          
+          // Cambiar el botón a estado "Detener"
+          btnListen.innerHTML = '<i class="fas fa-stop me-2"></i>Detener';
+          btnListen.classList.remove('btn-primary');
+          btnListen.classList.add('btn-danger');
+        })
+        .catch(err => {
+          console.error("Error al acceder al dispositivo de audio:", err);
+          alert("No se pudo conectar con la estación. Asegúrese de permitir el acceso al micrófono.");
+        });
     });
+    
+    // Función para detener la reproducción
+    function stopAudio() {
+      if (audioStream) {
+        audioStream.getTracks().forEach(track => track.stop());
+        audioStream = null;
+      }
+      
+      if (audioPlayer) {
+        audioPlayer.pause();
+        audioPlayer.srcObject = null;
+        audioPlayer.style.display = 'none';
+      }
+      
+      // Restaurar el botón a estado "Escuchar"
+      btnListen.innerHTML = '<i class="fas fa-play me-2"></i>Escuchar';
+      btnListen.classList.remove('btn-danger');
+      btnListen.classList.add('btn-primary');
+    }
+    
+    // Detener la reproducción al salir de la página
+    window.addEventListener('beforeunload', stopAudio);
   </script>
 </body>
 </html>
