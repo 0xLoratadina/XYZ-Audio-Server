@@ -362,9 +362,9 @@
                 <i class="fas fa-play me-1"></i>Escuchar
               </button>
             {% endif %}
-            <a href="{{ url_for('main.edit_station', station_id=station.doc_id) }}" class="btn btn-sm btn-outline-dark">
+            <button class="btn btn-sm btn-outline-dark" onclick="openEditModal('{{ station.doc_id }}', '{{ station.nombre }}', '{{ station.frecuencia }}', '{{ station.ciudad }}', '{{ station.audio_interface }}', '{{ station.audio_label }}')">
               <i class="fas fa-edit me-1"></i>Editar
-            </a>
+            </button>
             <a href="{{ url_for('main.public_listen', station_id=station.doc_id) }}" target="_blank" class="btn btn-sm btn-outline-dark">
               <i class="fas fa-share me-1"></i>Enviar
             </a>
@@ -430,6 +430,52 @@
     </div>
   </div>
   
+  <!-- Modal para editar estación -->
+  <div class="modal fade" id="modalEditEstacion" tabindex="-1" aria-labelledby="modalEditEstacionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalEditEstacionLabel">Editar Estación</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" id="editStationForm" enctype="multipart/form-data">
+            <input type="hidden" name="station_id" id="edit_station_id">
+            <div class="mb-3">
+              <label class="form-label">Nombre</label>
+              <input type="text" name="nombre" id="edit_nombre" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Logo (actual: <span id="current_logo_text"></span>)</label>
+              <input type="file" name="logo" class="form-control" accept="image/*">
+              <small class="text-muted">Dejar en blanco para mantener el logo actual</small>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Frecuencia</label>
+              <input type="text" name="frecuencia" id="edit_frecuencia" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Ciudad</label>
+              <input type="text" name="ciudad" id="edit_ciudad" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Interfaz de Audio</label>
+              <select id="edit_audio_interface_select" name="audio_interface" class="form-select">
+                <option value="">Selecciona una interfaz</option>
+              </select>
+              <input type="hidden" name="audio_label" id="edit_audio_label_hidden">
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-2"></i>Guardar Cambios
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <!-- Bootstrap Bundle JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   
@@ -449,6 +495,34 @@
       sidebar.classList.toggle('show');
     }
     
+    // Función para abrir el modal de edición con los datos de la estación
+    function openEditModal(stationId, nombre, frecuencia, ciudad, audioInterface, audioLabel) {
+      document.getElementById('edit_station_id').value = stationId;
+      document.getElementById('edit_nombre').value = nombre;
+      document.getElementById('edit_frecuencia').value = frecuencia;
+      document.getElementById('edit_ciudad').value = ciudad;
+      document.getElementById('edit_audio_label_hidden').value = audioLabel;
+      
+      // Configurar el texto del logo actual
+      const logoText = document.getElementById('current_logo_text');
+      logoText.textContent = audioLabel || 'Ninguno';
+      
+      // Configurar el formulario para que apunte a la ruta correcta
+      document.getElementById('editStationForm').action = `/edit_station/${stationId}`;
+      
+      // Mostrar el modal
+      const editModal = new bootstrap.Modal(document.getElementById('modalEditEstacion'));
+      editModal.show();
+      
+      // Configurar el select de interfaces de audio
+      setTimeout(() => {
+        const select = document.getElementById('edit_audio_interface_select');
+        if (audioInterface && select) {
+          select.value = audioInterface;
+        }
+      }, 500);
+    }
+    
     // Función para manejar dispositivos de audio
     async function requestAudioPermission() {
       try {
@@ -462,22 +536,44 @@
     requestAudioPermission().then(() => {
       if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
         navigator.mediaDevices.enumerateDevices().then(function(devices) {
-          var select = document.getElementById('audio_interface_select');
-          if (!select) return;
+          // Para el modal de agregar
+          var selectAdd = document.getElementById('audio_interface_select');
+          // Para el modal de editar
+          var selectEdit = document.getElementById('edit_audio_interface_select');
+          
+          if (!selectAdd && !selectEdit) return;
           
           devices.forEach(function(device) {
             if (device.kind === 'audioinput') {
-              var option = document.createElement('option');
-              option.value = device.deviceId;
-              option.text = device.label || 'Dispositivo sin nombre';
-              select.appendChild(option);
+              if (selectAdd) {
+                var optionAdd = document.createElement('option');
+                optionAdd.value = device.deviceId;
+                optionAdd.text = device.label || 'Dispositivo sin nombre';
+                selectAdd.appendChild(optionAdd);
+              }
+              
+              if (selectEdit) {
+                var optionEdit = document.createElement('option');
+                optionEdit.value = device.deviceId;
+                optionEdit.text = device.label || 'Dispositivo sin nombre';
+                selectEdit.appendChild(optionEdit);
+              }
             }
           });
           
-          select.addEventListener('change', function() {
-            var selectedOption = select.options[select.selectedIndex];
-            document.getElementById('audio_label_hidden').value = selectedOption.text;
-          });
+          if (selectAdd) {
+            selectAdd.addEventListener('change', function() {
+              var selectedOption = selectAdd.options[selectAdd.selectedIndex];
+              document.getElementById('audio_label_hidden').value = selectedOption.text;
+            });
+          }
+          
+          if (selectEdit) {
+            selectEdit.addEventListener('change', function() {
+              var selectedOption = selectEdit.options[selectEdit.selectedIndex];
+              document.getElementById('edit_audio_label_hidden').value = selectedOption.text;
+            });
+          }
         });
       }
     });
