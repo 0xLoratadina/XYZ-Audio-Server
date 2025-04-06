@@ -1,3 +1,3 @@
 DEBUG = True
-SECRET_KEY = '9f8c2b1e7a3d4f6b8c9d0a1b2c3d4e5f'
+SECRET_KEY = 'e7d328e4d1e192dafdfa6090a6c36514'
 TINIDB_PATH = 'tinidb.json'

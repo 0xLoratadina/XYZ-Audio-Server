@@ -1,33 +1,348 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Dashboard - XYZ Audio Server</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <meta charset="UTF-8">
+  <title>Dashboard - RadioStatus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap 5 CSS y Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f5f7fb;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      overflow-x: hidden;
+      margin: 0;
+    }
+    .navbar {
+      background-color: #fff;
+      border-bottom: 1px solid #eaeaea;
+      padding: 0.75rem 1.5rem;
+      z-index: 1100;
+    }
+    .navbar-brand {
+      color: #6c5ce7 !important;
+      font-weight: 700;
+      font-size: 1.5rem;
+      text-decoration: none;
+    }
+    .navbar-text {
+      font-weight: 500;
+      color: #333;
+    }
+    .sidebar {
+      width: 250px;
+      background-color: #fff;
+      min-height: 100vh;
+      border-right: 1px solid #eaeaea;
+      position: fixed;
+      top: 56px;
+      left: 0;
+      padding: 1rem;
+      padding-top: 50px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      z-index: 1000;
+    }
+    .sidebar .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #333;
+      font-weight: 500;
+      border-radius: 8px;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+    }
+    .sidebar .nav-link:hover {
+      background-color: #f0f0f0;
+      color: #6c5ce7;
+    }
+    .main-content {
+      margin-left: 250px;
+      margin-top: 20px;
+      padding: 1rem 3rem;
+    }
+    .stats-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .stats-card h5 {
+      margin-bottom: 0.5rem;
+    }
+    .stats-card p {
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin: 0;
+    }
+    /* Tarjeta de estación con flex column */
+    .station-card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      background-color: #fff;
+      padding: 1.5rem;
+    }
+    .card-content {
+      /* Contenedor de la parte media */
+      margin-bottom: 1rem;
+    }
+    .station-card .card-header {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+    }
+    .station-card .station-logo {
+      width: 60px;
+      height: auto;
+      border-radius: 8px;
+      margin-right: 1rem;
+    }
+    /* Botones al fondo de la tarjeta */
+    .actions {
+      margin-top: auto;
+    }
+    .actions .btn {
+      margin-right: 0.4rem;
+      margin-bottom: 0.4rem;
+    }
+    .audio-row {
+      display: none;
+      margin-top: 1rem;
+      background-color: #f9f9f9;
+      padding: 0.8rem;
+      border-radius: 8px;
+    }
+    .btn-outline-dark, .btn-primary, .btn-danger {
+      border-radius: 8px;
+    }
+    .btn-primary {
+      background-color: #6c5ce7;
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: #5a4dc2;
+    }
+  </style>
 </head>
 <body>
-    <h1>Dashboard - XYZ Audio Server</h1>
-    <table border="1" cellspacing="0" cellpadding="5">
-        <thead>
-            <tr>
-                <th>Estación</th>
-                <th>Estado</th>
-                <th>Timestamp</th>
-                <th>Detalle</th>
-                <th>Similaridad</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for event in events %}
-            <tr>
-                <td>{{ event.estacion }}</td>
-                <td>{{ event.estado }}</td>
-                <td>{{ event.timestamp }}</td>
-                <td>{{ event.detalle }}</td>
-                <td>{{ event.similarity }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+  <nav class="navbar navbar-light">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+      <a class="navbar-brand" href="#">RadioStatus</a>
+      <span class="navbar-text">Hola, {{ session['user_id'] }}!</span>
+    </div>
+  </nav>
+  <div class="sidebar">
+    <a class="nav-link" href="#"><i class="fas fa-home"></i>Inicio</a>
+    <a class="nav-link" href="#"><i class="fas fa-chart-line"></i>Estadísticas</a>
+    <a class="nav-link" href="#"><i class="fas fa-headphones"></i>Estaciones</a>
+    <a class="nav-link" href="#"><i class="fas fa-cog"></i>Configuración</a>
+  </div>
+  <div class="main-content">
+    <div class="row g-4 mb-4">
+      <div class="col-md-4">
+        <div class="stats-card">
+          <h5>Horas en Reproducción</h5>
+          <p>{{ horas_reproduccion or '0' }}</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="stats-card">
+          <h5>Usuarios Escuchando</h5>
+          <p>{{ usuarios_escuchando or '0' }}</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="stats-card">
+          <h5>Fecha y Hora Actual</h5>
+          <p id="currentDateTime"></p>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="mb-0">Estaciones</h5>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEstacion">
+        <i class="fas fa-plus me-2"></i>Agregar Estación
+      </button>
+    </div>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      {% for station in stations %}
+      <div class="col">
+        <!-- Tarjeta de estación con flex column -->
+        <div class="station-card">
+          <div class="card-content">
+            <div class="card-header">
+              {% if station.logo %}
+                <img src="{{ url_for('static', filename='logos/' ~ station.logo) }}" alt="{{ station.nombre }}" class="station-logo">
+              {% else %}
+                <div class="bg-secondary text-white d-flex justify-content-center align-items-center" style="width:60px; height:60px; border-radius:8px; margin-right:1rem;">
+                  N/A
+                </div>
+              {% endif %}
+              <div>
+                <h5 class="mb-0">{{ station.nombre }}</h5>
+              </div>
+            </div>
+            <p class="mb-1"><strong>Frecuencia:</strong> {{ station.frecuencia }}</p>
+            <p class="mb-1"><strong>Ciudad:</strong> {{ station.ciudad }}</p>
+            <p class="mb-1"><strong>Estado:</strong> {{ station.estado }}</p>
+            <p class="mb-1"><strong>Interfaz:</strong> {{ station.audio_label if station.audio_label else 'N/A' }}</p>
+          </div>
+          <!-- Sección de botones al fondo -->
+          <div class="actions d-flex flex-wrap align-items-center">
+            {% if station.audio_interface %}
+              <button class="btn btn-sm btn-outline-dark" data-playing="false" onclick="toggleAudio(this, '{{ station.audio_interface }}')">
+                <i class="fas fa-play me-1"></i>Escuchar
+              </button>
+            {% else %}
+              <button class="btn btn-sm btn-outline-dark" disabled>
+                <i class="fas fa-play me-1"></i>Escuchar
+              </button>
+            {% endif %}
+            <a href="{{ url_for('main.edit_station', station_id=station.doc_id) }}" class="btn btn-sm btn-outline-dark">
+              <i class="fas fa-edit me-1"></i>Editar
+            </a>
+            <a href="{{ url_for('main.public_listen', station_id=station.doc_id) }}" target="_blank" class="btn btn-sm btn-outline-dark">
+              <i class="fas fa-share me-1"></i>Enviar
+            </a>
+            <a href="{{ url_for('main.delete_station', station_id=station.doc_id) }}" class="btn btn-sm btn-danger">
+              <i class="fas fa-trash me-1"></i>Eliminar
+            </a>
+          </div>
+          <div class="audio-row">
+            <div class="d-flex align-items-center">
+              <p class="mb-0 me-3">Reproduciendo: {{ station.nombre }}</p>
+              <audio controls style="display:none;"></audio>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="modal fade" id="modalEstacion" tabindex="-1" aria-labelledby="modalEstacionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalEstacionLabel">Agregar Estación</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" action="{{ url_for('main.add_station') }}" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label class="form-label">Nombre</label>
+              <input type="text" name="nombre" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Logo</label>
+              <input type="file" name="logo" class="form-control" accept="image/*">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Frecuencia</label>
+              <input type="text" name="frecuencia" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Ciudad</label>
+              <input type="text" name="ciudad" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Interfaz de Audio</label>
+              <select id="audio_interface_select" name="audio_interface" class="form-select">
+                <option value="">Selecciona una interfaz</option>
+              </select>
+              <input type="hidden" name="audio_label" id="audio_label_hidden">
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-2"></i>Guardar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function updateDateTime() {
+      const now = new Date();
+      document.getElementById('currentDateTime').textContent = now.toLocaleString();
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+  </script>
+  <script>
+    async function requestAudioPermission() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        stream.getTracks().forEach(track => track.stop());
+      } catch (err) {
+        console.log("Permiso de micrófono denegado o error:", err);
+      }
+    }
+    requestAudioPermission().then(() => {
+      if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+        navigator.mediaDevices.enumerateDevices().then(function(devices) {
+          var select = document.getElementById('audio_interface_select');
+          if (!select) return;
+          devices.forEach(function(device) {
+            if (device.kind === 'audioinput') {
+              var option = document.createElement('option');
+              option.value = device.deviceId;
+              option.text = device.label || 'Dispositivo sin nombre';
+              select.appendChild(option);
+            }
+          });
+          select.addEventListener('change', function() {
+            var selectedOption = select.options[select.selectedIndex];
+            document.getElementById('audio_label_hidden').value = selectedOption.text;
+          });
+        });
+      }
+    });
+  </script>
+  <script>
+    let currentStream = null;
+    function toggleAudio(btn, deviceId) {
+      const playing = (btn.dataset.playing === 'true');
+      const card = btn.closest('.station-card');
+      const audioRow = card.querySelector('.audio-row');
+      const audioElement = audioRow.querySelector('audio');
+      if (!playing) {
+        audioRow.style.display = 'block';
+        audioElement.style.display = 'block';
+        navigator.mediaDevices.getUserMedia({ audio: { deviceId: { exact: deviceId } } })
+        .then(stream => {
+          currentStream = stream;
+          audioElement.srcObject = stream;
+          audioElement.play();
+          btn.innerHTML = '<i class="fas fa-stop me-1"></i>Parar';
+          btn.dataset.playing = 'true';
+        })
+        .catch(err => {
+          console.error(err);
+          alert("Error al acceder a la interfaz de audio.");
+        });
+      } else {
+        audioRow.style.display = 'none';
+        if (currentStream) {
+          currentStream.getTracks().forEach(track => track.stop());
+        }
+        audioElement.pause();
+        audioElement.srcObject = null;
+        currentStream = null;
+        btn.innerHTML = '<i class="fas fa-play me-1"></i>Escuchar';
+        btn.dataset.playing = 'false';
+      }
+    }
+  </script>
 </body>
 </html>
