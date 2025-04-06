@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>Dashboard - RadioStatus</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Bootstrap 5 CSS y Font Awesome -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
   <style>
@@ -22,7 +22,7 @@
       --logout-color: #8a7aec;
       --logout-hover: #6c5ce7;
     }
-    
+
     body {
       background-color: var(--bg-color);
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -31,8 +31,7 @@
       padding-top: 56px;
       color: var(--text-color);
     }
-    
-    /* Navbar estático */
+
     .navbar {
       background-color: var(--card-bg);
       border-bottom: 1px solid var(--border-color);
@@ -42,21 +41,20 @@
       top: 0;
       left: 0;
       right: 0;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
-    
+
     .navbar-brand {
       color: var(--primary-color) !important;
       font-weight: 700;
       font-size: 1.5rem;
       text-decoration: none;
     }
-    
+
     .navbar-text {
       font-weight: 500;
     }
-    
-    /* Sidebar */
+
     .sidebar {
       width: var(--sidebar-width);
       background-color: var(--card-bg);
@@ -73,7 +71,7 @@
       z-index: 1000;
       transition: all 0.3s ease;
     }
-    
+
     .sidebar .nav-link {
       display: flex;
       align-items: center;
@@ -85,64 +83,62 @@
       padding: 0.5rem 1rem;
       transition: all 0.2s;
     }
-    
-    .sidebar .nav-link:hover, .sidebar .nav-link.active {
+
+    .sidebar .nav-link:hover,
+    .sidebar .nav-link.active {
       background-color: rgba(108, 92, 231, 0.1);
       color: var(--primary-color);
     }
-    
-    /* Contenido principal */
+
     .main-content {
       margin-left: var(--sidebar-width);
       margin-top: 20px;
       padding: 1rem 3rem;
       transition: all 0.3s ease;
     }
-    
-    /* Tarjetas de estadísticas */
+
     .stats-card {
       background: var(--card-bg);
       border-radius: 12px;
       padding: 1.5rem;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
       text-align: center;
       height: 100%;
     }
-    
+
     .stats-card h5 {
       margin-bottom: 0.5rem;
       color: #666;
       font-size: 1rem;
     }
-    
+
     .stats-card p {
       font-size: 1.8rem;
       font-weight: bold;
       margin: 0;
       color: var(--primary-color);
     }
-    
-    /* Tarjetas de estación */
+
     .station-card {
       display: flex;
       flex-direction: column;
       height: 100%;
       border-radius: 12px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
       background-color: var(--card-bg);
       padding: 1.5rem;
       transition: transform 0.2s;
     }
-    
+
     .station-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
-    
+
     .card-content {
       margin-bottom: 1rem;
     }
-    
+
     .station-card .card-header {
       border-bottom: 1px solid var(--border-color);
       padding-bottom: 1rem;
@@ -150,7 +146,7 @@
       display: flex;
       align-items: center;
     }
-    
+
     .station-card .station-logo {
       width: 60px;
       height: 60px;
@@ -158,7 +154,7 @@
       border-radius: 8px;
       margin-right: 1rem;
     }
-    
+
     .station-card .no-logo {
       width: 60px;
       height: 60px;
@@ -170,56 +166,57 @@
       justify-content: center;
       color: #999;
     }
-    
-    /* Botones */
+
     .actions {
       margin-top: auto;
       display: flex;
       flex-wrap: wrap;
       gap: 0.4rem;
     }
-    
+
     .btn {
       border-radius: 8px;
       padding: 0.375rem 0.75rem;
       font-weight: 500;
       transition: all 0.2s;
     }
-    
+
     .btn-primary {
       background-color: var(--primary-color);
       border: none;
       color: white;
     }
-    
-    .btn-primary:hover, .btn-primary:active {
+
+    .btn-primary:hover,
+    .btn-primary:active {
       background-color: var(--primary-hover);
       color: white;
     }
-    
+
     .btn-outline-dark {
       border: 1px solid var(--border-color);
       color: var(--text-color);
     }
-    
-    .btn-outline-dark:hover, .btn-outline-dark:active {
+
+    .btn-outline-dark:hover,
+    .btn-outline-dark:active {
       background-color: var(--btn-hover);
       color: white !important;
       border-color: var(--btn-hover);
     }
-    
+
     .btn-danger {
       background-color: var(--danger-color);
       border: none;
       color: white;
     }
-    
-    .btn-danger:hover, .btn-danger:active {
+
+    .btn-danger:hover,
+    .btn-danger:active {
       background-color: var(--danger-hover);
       color: white;
     }
-    
-    /* Audio player */
+
     .audio-row {
       display: none;
       margin-top: 1rem;
@@ -227,36 +224,33 @@
       padding: 0.8rem;
       border-radius: 8px;
     }
-    
-    /* Botón de cerrar sesión */
+
     .logout-btn {
       margin-top: auto;
       margin-bottom: 1rem;
     }
-    
+
     .logout-btn .btn {
       width: 100%;
       background-color: var(--logout-color);
       color: white;
       border: none;
     }
-    
+
     .logout-btn .btn:hover {
       background-color: var(--logout-hover);
     }
-    
-    /* Modal */
+
     .modal-content {
       border-radius: 12px;
       border: none;
     }
-    
-    /* Modal de compartir */
+
     .share-link-container {
       display: flex;
       margin-bottom: 1rem;
     }
-    
+
     .share-link {
       flex-grow: 1;
       padding: 0.5rem;
@@ -266,40 +260,39 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    
+
     .copy-btn {
       border-radius: 0 8px 8px 0;
       border-left: none;
     }
-    
-    /* Responsive */
+
     @media (max-width: 992px) {
       :root {
         --sidebar-width: 220px;
       }
     }
-    
+
     @media (max-width: 768px) {
       .sidebar {
         transform: translateX(-100%);
       }
-      
+
       .sidebar.show {
         transform: translateX(0);
       }
-      
+
       .main-content {
         margin-left: 0;
       }
-      
+
       .navbar-toggler {
         display: block;
       }
     }
   </style>
 </head>
+
 <body>
-  <!-- Navbar estático -->
   <nav class="navbar navbar-light fixed-top">
     <div class="container-fluid d-flex justify-content-between align-items-center">
       <button class="navbar-toggler d-md-none" type="button" onclick="toggleSidebar()">
@@ -309,25 +302,21 @@
       <span class="navbar-text">Hola, {{ session['user_id'] }}!</span>
     </div>
   </nav>
-  
-  <!-- Sidebar -->
+
   <div class="sidebar" id="sidebar">
     <a class="nav-link active" href="#"><i class="fas fa-home"></i>Inicio</a>
     <a class="nav-link" href="#"><i class="fas fa-chart-line"></i>Estadísticas</a>
     <a class="nav-link" href="#"><i class="fas fa-headphones"></i>Estaciones</a>
     <a class="nav-link" href="#"><i class="fas fa-cog"></i>Configuración</a>
-    
-    <!-- Botón de cerrar sesión en color morado -->
+
     <div class="logout-btn">
       <a href="{{ url_for('main.logout') }}" class="btn">
         <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
       </a>
     </div>
   </div>
-  
-  <!-- Contenido principal -->
+
   <div class="main-content" id="mainContent">
-    <!-- Estadísticas -->
     <div class="row g-4 mb-4">
       <div class="col-md-4">
         <div class="stats-card">
@@ -348,16 +337,14 @@
         </div>
       </div>
     </div>
-    
-    <!-- Encabezado de estaciones -->
+
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h4 class="mb-0">Estaciones</h4>
       <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEstacion">
         <i class="fas fa-plus me-2"></i>Agregar Estación
       </button>
     </div>
-    
-    <!-- Lista de estaciones -->
+
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
       {% for station in stations %}
       <div class="col">
@@ -365,11 +352,12 @@
           <div class="card-content">
             <div class="card-header">
               {% if station.logo %}
-                <img src="{{ url_for('static', filename='logos/' ~ station.logo) }}" alt="{{ station.nombre }}" class="station-logo">
+              <img src="{{ url_for('static', filename='logos/' ~ station.logo) }}" alt="{{ station.nombre }}"
+                class="station-logo">
               {% else %}
-                <div class="no-logo">
-                  <i class="fas fa-broadcast-tower"></i>
-                </div>
+              <div class="no-logo">
+                <i class="fas fa-broadcast-tower"></i>
+              </div>
               {% endif %}
               <div>
                 <h5 class="mb-0">{{ station.nombre }}</h5>
@@ -377,34 +365,38 @@
               </div>
             </div>
             <div class="station-details">
-              <p class="mb-1"><i class="fas fa-map-marker-alt me-2 text-muted"></i> {{ station.ciudad }}, {{ station.estado }}</p>
-              <p class="mb-1"><i class="fas fa-microphone me-2 text-muted"></i> {{ station.audio_label if station.audio_label else 'N/A' }}</p>
+              <p class="mb-1"><i class="fas fa-map-marker-alt me-2 text-muted"></i> {{ station.ciudad }}, {{
+                station.estado }}</p>
+              <p class="mb-1"><i class="fas fa-microphone me-2 text-muted"></i> {{ station.audio_label if
+                station.audio_label else 'N/A' }}</p>
             </div>
           </div>
-          
-          <!-- Acciones -->
+
           <div class="actions">
             {% if station.audio_interface %}
-              <button class="btn btn-sm btn-outline-dark" data-playing="false" onclick="toggleAudio(this, '{{ station.audio_interface }}')">
-                <i class="fas fa-play me-1"></i>Escuchar
-              </button>
+            <button class="btn btn-sm btn-outline-dark" data-playing="false"
+              onclick="toggleAudio(this, '{{ station.audio_interface }}')">
+              <i class="fas fa-play me-1"></i>Escuchar
+            </button>
             {% else %}
-              <button class="btn btn-sm btn-outline-dark" disabled>
-                <i class="fas fa-play me-1"></i>Escuchar
-              </button>
+            <button class="btn btn-sm btn-outline-dark" disabled>
+              <i class="fas fa-play me-1"></i>Escuchar
+            </button>
             {% endif %}
-            <button class="btn btn-sm btn-outline-dark" onclick="openEditModal('{{ station.doc_id }}', '{{ station.nombre }}', '{{ station.frecuencia }}', '{{ station.ciudad }}', '{{ station.audio_interface }}', '{{ station.audio_label }}')">
+            <button class="btn btn-sm btn-outline-dark"
+              onclick="openEditModal('{{ station.doc_id }}', '{{ station.nombre }}', '{{ station.frecuencia }}', '{{ station.ciudad }}', '{{ station.audio_interface }}', '{{ station.audio_label }}')">
               <i class="fas fa-edit me-1"></i>Editar
             </button>
-            <button class="btn btn-sm btn-outline-dark" onclick="openShareModal('{{ station.doc_id }}', '{{ station.nombre }}')">
+            <button class="btn btn-sm btn-outline-dark"
+              onclick="openShareModal('{{ station.doc_id }}', '{{ station.nombre }}')">
               <i class="fas fa-share me-1"></i>Enviar
             </button>
-            <button class="btn btn-sm btn-danger" onclick="confirmDelete('{{ station.doc_id }}', '{{ station.nombre }}')">
+            <button class="btn btn-sm btn-danger"
+              onclick="confirmDelete('{{ station.doc_id }}', '{{ station.nombre }}')">
               <i class="fas fa-trash me-1"></i>Eliminar
             </button>
           </div>
-          
-          <!-- Reproductor de audio -->
+
           <div class="audio-row">
             <div class="d-flex align-items-center">
               <p class="mb-0 me-3">Reproduciendo: {{ station.nombre }}</p>
@@ -416,8 +408,7 @@
       {% endfor %}
     </div>
   </div>
-  
-  <!-- Modal para agregar estación -->
+
   <div class="modal fade" id="modalEstacion" tabindex="-1" aria-labelledby="modalEstacionLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -460,9 +451,9 @@
       </div>
     </div>
   </div>
-  
-  <!-- Modal para editar estación -->
-  <div class="modal fade" id="modalEditEstacion" tabindex="-1" aria-labelledby="modalEditEstacionLabel" aria-hidden="true">
+
+  <div class="modal fade" id="modalEditEstacion" tabindex="-1" aria-labelledby="modalEditEstacionLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
@@ -506,9 +497,9 @@
       </div>
     </div>
   </div>
-  
-  <!-- Modal para compartir estación -->
-  <div class="modal fade" id="modalShareEstacion" tabindex="-1" aria-labelledby="modalShareEstacionLabel" aria-hidden="true">
+
+  <div class="modal fade" id="modalShareEstacion" tabindex="-1" aria-labelledby="modalShareEstacionLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
@@ -532,9 +523,9 @@
       </div>
     </div>
   </div>
-  
-  <!-- Modal de confirmación para eliminar -->
-  <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+
+  <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
@@ -551,46 +542,37 @@
       </div>
     </div>
   </div>
-  
-  <!-- Bootstrap Bundle JS -->
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  
-  <!-- Scripts personalizados -->
+
   <script>
-    // Función para mostrar fecha y hora actual
     function updateDateTime() {
       const now = new Date();
       document.getElementById('currentDateTime').textContent = now.toLocaleString();
     }
     setInterval(updateDateTime, 1000);
     updateDateTime();
-    
-    // Función para alternar el sidebar en móviles
+
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar');
       sidebar.classList.toggle('show');
     }
-    
-    // Función para abrir el modal de edición con los datos de la estación
+
     function openEditModal(stationId, nombre, frecuencia, ciudad, audioInterface, audioLabel) {
       document.getElementById('edit_station_id').value = stationId;
       document.getElementById('edit_nombre').value = nombre;
       document.getElementById('edit_frecuencia').value = frecuencia;
       document.getElementById('edit_ciudad').value = ciudad;
       document.getElementById('edit_audio_label_hidden').value = audioLabel;
-      
-      // Configurar el texto del logo actual
+
       const logoText = document.getElementById('current_logo_text');
       logoText.textContent = audioLabel || 'Ninguno';
-      
-      // Configurar el formulario para que apunte a la ruta correcta
+
       document.getElementById('editStationForm').action = `/edit_station/${stationId}`;
-      
-      // Mostrar el modal
+
       const editModal = new bootstrap.Modal(document.getElementById('modalEditEstacion'));
       editModal.show();
-      
-      // Configurar el select de interfaces de audio
+
       setTimeout(() => {
         const select = document.getElementById('edit_audio_interface_select');
         if (audioInterface && select) {
@@ -598,45 +580,40 @@
         }
       }, 500);
     }
-    
-    // Función para abrir el modal de compartir
+
     function openShareModal(stationId, stationName) {
       const shareLink = `${window.location.origin}/public_listen/${stationId}`;
-      
+
       document.getElementById('shareStationName').querySelector('strong').textContent = stationName;
       document.getElementById('shareLink').value = shareLink;
       document.getElementById('openLinkBtn').href = shareLink;
-      
+
       const shareModal = new bootstrap.Modal(document.getElementById('modalShareEstacion'));
       shareModal.show();
     }
-    
-    // Función para copiar el enlace al portapapeles
+
     function copyShareLink() {
       const shareLink = document.getElementById('shareLink');
       shareLink.select();
       document.execCommand('copy');
-      
-      // Mostrar feedback al usuario
+
       const copyBtn = document.querySelector('.copy-btn');
       const originalHtml = copyBtn.innerHTML;
       copyBtn.innerHTML = '<i class="fas fa-check"></i>';
-      
+
       setTimeout(() => {
         copyBtn.innerHTML = originalHtml;
       }, 2000);
     }
-    
-    // Función para confirmar eliminación
+
     function confirmDelete(stationId, stationName) {
       document.getElementById('deleteConfirmationText').textContent = `¿Estás seguro que deseas eliminar la estación "${stationName}"?`;
       document.getElementById('confirmDeleteBtn').href = `/delete_station/${stationId}`;
-      
+
       const deleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
       deleteModal.show();
     }
-    
-    // Función para manejar dispositivos de audio
+
     async function requestAudioPermission() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -645,18 +622,18 @@
         console.log("Permiso de micrófono denegado o error:", err);
       }
     }
-    
+
     requestAudioPermission().then(() => {
       if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
-        navigator.mediaDevices.enumerateDevices().then(function(devices) {
-          // Para el modal de agregar
+        navigator.mediaDevices.enumerateDevices().then(function (devices) {
+
           var selectAdd = document.getElementById('audio_interface_select');
-          // Para el modal de editar
+
           var selectEdit = document.getElementById('edit_audio_interface_select');
-          
+
           if (!selectAdd && !selectEdit) return;
-          
-          devices.forEach(function(device) {
+
+          devices.forEach(function (device) {
             if (device.kind === 'audioinput') {
               if (selectAdd) {
                 var optionAdd = document.createElement('option');
@@ -664,7 +641,7 @@
                 optionAdd.text = device.label || 'Dispositivo sin nombre';
                 selectAdd.appendChild(optionAdd);
               }
-              
+
               if (selectEdit) {
                 var optionEdit = document.createElement('option');
                 optionEdit.value = device.deviceId;
@@ -673,16 +650,16 @@
               }
             }
           });
-          
+
           if (selectAdd) {
-            selectAdd.addEventListener('change', function() {
+            selectAdd.addEventListener('change', function () {
               var selectedOption = selectAdd.options[selectAdd.selectedIndex];
               document.getElementById('audio_label_hidden').value = selectedOption.text;
             });
           }
-          
+
           if (selectEdit) {
-            selectEdit.addEventListener('change', function() {
+            selectEdit.addEventListener('change', function () {
               var selectedOption = selectEdit.options[selectEdit.selectedIndex];
               document.getElementById('edit_audio_label_hidden').value = selectedOption.text;
             });
@@ -690,19 +667,18 @@
         });
       }
     });
-    
-    // Función para controlar la reproducción de audio
+
     let currentStream = null;
     function toggleAudio(btn, deviceId) {
       const playing = (btn.dataset.playing === 'true');
       const card = btn.closest('.station-card');
       const audioRow = card.querySelector('.audio-row');
       const audioElement = audioRow.querySelector('audio');
-      
+
       if (!playing) {
         audioRow.style.display = 'block';
         audioElement.style.display = 'block';
-        
+
         navigator.mediaDevices.getUserMedia({ audio: { deviceId: { exact: deviceId } } })
           .then(stream => {
             currentStream = stream;
@@ -729,4 +705,5 @@
     }
   </script>
 </body>
+
 </html>
