@@ -21,6 +21,17 @@
       "nombre": "Latidos",
       "owner": "Eduardo Lopez",
       "ultima_actualizacion": "2025-04-06T07:34:38.416078"
+    },
+    "3": {
+      "audio_interface": "04974319476f3920869e78f0b36982e4f040346685f306f2734c13c94c400f43",
+      "audio_label": "Micrófono (G435 Wireless Gaming Headset) (046d:0acb)",
+      "ciudad": "Oaxaca",
+      "estado": "Desconocido",
+      "frecuencia": "384.32",
+      "logo": "_91408619_55df76d5-2245-41c1-8031-07a4da3f313f.jpg",
+      "nombre": "Pepe Station",
+      "owner": "Eduardo Lopez",
+      "ultima_actualizacion": "2025-04-06T18:50:12.819817"
     }
   },
   "users": {
