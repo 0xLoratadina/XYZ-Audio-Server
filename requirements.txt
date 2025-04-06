@@ -6,3 +6,5 @@ scipy>=1.5.0
 soundfile>=0.10.3.post1
 passlib>=1.7.4
 bcrypt<4
+flask-socketio>=5.3
+eventlet>=0.33
