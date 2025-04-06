@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Escuchar: {{ station.nombre }} - RadioStatus</title>
+  <title>Escuchar {{ station.nombre }} - RadioStatus</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Bootstrap 5 CSS y Font Awesome -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -10,7 +10,7 @@
   <style>
     :root {
       --primary-color: #6c5ce7;
-      --primary-hover: #5a4dc2;
+      --primary-hover: #8a7aec;
       --bg-color: #f5f7fb;
       --card-bg: #fff;
       --text-color: #333;
@@ -21,9 +21,6 @@
       background-color: var(--bg-color);
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       color: var(--text-color);
-    }
-    
-    .public-container {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -31,94 +28,191 @@
       padding: 1rem;
     }
     
-    .public-card {
-      width: 100%;
-      max-width: 500px;
+    .listen-card {
       border: none;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(108, 92, 231, 0.15);
       background: var(--card-bg);
+      max-width: 400px;
+      width: 100%;
+      overflow: hidden;
+      transition: transform 0.3s ease;
     }
     
-    .public-body {
+    .listen-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .listen-header {
+      padding: 2rem;
+      text-align: center;
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .listen-body {
       padding: 2rem;
       text-align: center;
     }
     
-    .btn-dark {
-      background-color: var(--text-color);
+    .btn-primary {
+      background-color: var(--primary-color);
       border: none;
-      border-radius: 8px;
-      padding: 0.5rem 1.5rem;
+      border-radius: 12px;
+      padding: 0.75rem 2rem;
+      font-weight: 600;
+      transition: all 0.3s;
     }
     
-    .btn-dark:hover {
-      background-color: #222;
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(108, 92, 231, 0.25);
+    }
+    
+    .btn-outline-primary {
+      color: var(--primary-color);
+      border-color: var(--primary-color);
+      border-radius: 12px;
+      padding: 0.75rem 2rem;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    
+    .btn-outline-primary:hover {
+      background-color: rgba(108, 92, 231, 0.1);
     }
     
     .station-logo {
-      max-width: 150px;
-      border-radius: 8px;
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 12px;
       margin: 0 auto 1.5rem;
       display: block;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .no-logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 12px;
+      margin: 0 auto 1.5rem;
+      background-color: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-color);
+      font-size: 2.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     
     audio {
-      border-radius: 8px;
       width: 100%;
-      margin: 1.5rem 0;
+      margin-top: 1.5rem;
+      border-radius: 12px;
+    }
+    
+    .station-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--primary-color);
+    }
+    
+    .station-frequency {
+      color: #666;
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .btn-container {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+    
+    @media (max-width: 576px) {
+      .btn-container {
+        flex-direction: column;
+      }
+      
+      .btn-primary, .btn-outline-primary {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="public-container">
-    <div class="public-card shadow-sm">
-      <div class="public-body">
-        <h2 class="mb-4">Estación: {{ station.nombre }}</h2>
-        {% if station.logo %}
-          <img src="{{ url_for('static', filename='logos/' ~ station.logo) }}" alt="{{ station.nombre }}" class="station-logo img-fluid">
-        {% endif %}
-        <p class="mb-4">Interfaz: {{ station.audio_label if station.audio_label else 'Ninguna asignada' }}</p>
-        <button id="btn-start-public" class="btn btn-dark">
-          <i class="fas fa-play me-2"></i>Iniciar Escucha
-        </button>
-        <audio id="public-audio-player" controls style="display:none;"></audio>
-        <div class="mt-3">
-          <button onclick="window.close()" class="btn btn-secondary">
-            <i class="fas fa-times me-2"></i>Cerrar
-          </button>
+  <div class="listen-card">
+    <div class="listen-header">
+      <h3 class="mb-0">RadioStatus</h3>
+    </div>
+    <div class="listen-body">
+      {% if station.logo %}
+        <img src="{{ url_for('static', filename='logos/' ~ station.logo) }}" alt="{{ station.nombre }}" class="station-logo img-fluid">
+      {% else %}
+        <div class="no-logo">
+          <i class="fas fa-broadcast-tower"></i>
         </div>
+      {% endif %}
+      
+      <h2 class="station-name">{{ station.nombre }}</h2>
+      {% if station.frecuencia %}
+        <p class="station-frequency">{{ station.frecuencia }}</p>
+      {% endif %}
+      
+      <div class="btn-container">
+        <button id="btn-start-listen" class="btn btn-primary">
+          <i class="fas fa-play me-2"></i>Escuchar
+        </button>
+        <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-primary">
+          <i class="fas fa-arrow-left me-2"></i>Volver
+        </a>
       </div>
+      
+      <audio id="audio-player" controls style="display:none;"></audio>
     </div>
   </div>
   
   <!-- Bootstrap Bundle JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    document.getElementById('btn-start-public').addEventListener('click', function() {
-      var deviceId = "{{ station.audio_interface }}";
+    document.getElementById('btn-start-listen').addEventListener('click', function() {
+      const btn = this;
+      const deviceId = "{{ station.audio_interface }}";
+      
       if (!deviceId) {
-        alert("No hay interfaz de audio asignada.");
+        alert("No hay interfaz de audio configurada para esta estación.");
         return;
       }
+      
       navigator.mediaDevices.getUserMedia({ audio: { deviceId: { exact: deviceId } } })
       .then(stream => {
-        var audioPlayer = document.getElementById('public-audio-player');
+        const audioPlayer = document.getElementById('audio-player');
         audioPlayer.style.display = 'block';
         audioPlayer.srcObject = stream;
         audioPlayer.play();
-        document.getElementById('btn-start-public').innerHTML = '<i class="fas fa-stop me-2"></i>Detener';
-        document.getElementById('btn-start-public').onclick = function() {
+        
+        btn.innerHTML = '<i class="fas fa-stop me-2"></i>Detener';
+        btn.classList.remove('btn-primary');
+        btn.classList.add('btn-danger');
+        
+        // Cambiar el comportamiento del botón para detener
+        btn.onclick = function() {
           audioPlayer.pause();
           audioPlayer.srcObject = null;
           stream.getTracks().forEach(track => track.stop());
-          this.innerHTML = '<i class="fas fa-play me-2"></i>Iniciar Escucha';
-          this.onclick = arguments.callee.caller;
+          btn.innerHTML = '<i class="fas fa-play me-2"></i>Escuchar';
+          btn.classList.remove('btn-danger');
+          btn.classList.add('btn-primary');
+          btn.onclick = arguments.callee.caller;
         };
       })
       .catch(err => {
         console.error(err);
-        alert("Error al acceder a la interfaz de audio.");
+        alert("Error al conectar con la estación. Intente nuevamente.");
       });
     });
   </script>
