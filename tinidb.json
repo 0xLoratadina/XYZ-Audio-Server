@@ -1,0 +1,36 @@
+{
+  "stations": {
+    "1": {
+      "audio_interface": "b2a2bc6f0efa814c742c40b01a610010c2121411b5aee338b4862723702e5693",
+      "audio_label": "Micrófono (MicStream)",
+      "ciudad": "Nyc",
+      "estado": "Desconocido",
+      "frecuencia": "108.4",
+      "logo": "_120240849_kanye_epa_2.jpg",
+      "nombre": "Ye Station",
+      "owner": "Daniel",
+      "ultima_actualizacion": "2025-04-06T07:36:03.120288"
+    },
+    "2": {
+      "audio_interface": "04974319476f3920869e78f0b36982e4f040346685f306f2734c13c94c400f43",
+      "audio_label": "Micrófono (G435 Wireless Gaming Headset) (046d:0acb)",
+      "ciudad": "Chetumal",
+      "estado": "Desconocido",
+      "frecuencia": "104.2",
+      "logo": "descarga.jpg",
+      "nombre": "Latidos",
+      "owner": "Eduardo Lopez",
+      "ultima_actualizacion": "2025-04-06T07:34:38.416078"
+    }
+  },
+  "users": {
+    "1": {
+      "password": "$2b$12$FBCuu1XuzjUG5MZA7og/X.FmvFqxNG.5ACx58EhiywbfnSmX2N.yu",
+      "username": "Daniel"
+    },
+    "2": {
+      "password": "$2b$12$dJCZkL5qcujRNNsdN7VN9OOVE3H9qoHczoPAeeu712No.bzSyOFjW",
+      "username": "Eduardo Lopez"
+    }
+  }
+}
