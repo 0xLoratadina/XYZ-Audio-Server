@@ -11,8 +11,8 @@
     :root {
       --primary-color: #6c5ce7;
       --primary-hover: #5a4dc2;
-      --danger-color: #6c5ce7;  /* Cambiado a morado */
-      --danger-hover: #5a4dc2;  /* Cambiado a morado oscuro */
+      --danger-color: #6c5ce7;
+      --danger-hover: #5a4dc2;
       --bg-color: #f5f7fb;
       --card-bg: #fff;
       --text-color: #333;
@@ -226,19 +226,40 @@
     
     .logout-btn .btn {
       width: 100%;
-      background-color: var(--danger-color); /* Color morado */
+      background-color: var(--danger-color);
       color: white;
       border: none;
     }
     
     .logout-btn .btn:hover {
-      background-color: var(--danger-hover); /* Color morado oscuro */
+      background-color: var(--danger-hover);
     }
     
     /* Modal */
     .modal-content {
       border-radius: 12px;
       border: none;
+    }
+    
+    /* Modal de compartir */
+    .share-link-container {
+      display: flex;
+      margin-bottom: 1rem;
+    }
+    
+    .share-link {
+      flex-grow: 1;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 8px 0 0 8px;
+      background-color: #f9f9f9;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .copy-btn {
+      border-radius: 0 8px 8px 0;
+      border-left: none;
     }
     
     /* Responsive */
@@ -286,7 +307,7 @@
     <a class="nav-link" href="#"><i class="fas fa-headphones"></i>Estaciones</a>
     <a class="nav-link" href="#"><i class="fas fa-cog"></i>Configuración</a>
     
-    <!-- Botón de cerrar sesión en color morado -->
+    <!-- Botón de cerrar sesión -->
     <div class="logout-btn">
       <a href="{{ url_for('main.logout') }}" class="btn">
         <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
@@ -365,9 +386,9 @@
             <button class="btn btn-sm btn-outline-dark" onclick="openEditModal('{{ station.doc_id }}', '{{ station.nombre }}', '{{ station.frecuencia }}', '{{ station.ciudad }}', '{{ station.audio_interface }}', '{{ station.audio_label }}')">
               <i class="fas fa-edit me-1"></i>Editar
             </button>
-            <a href="{{ url_for('main.public_listen', station_id=station.doc_id) }}" target="_blank" class="btn btn-sm btn-outline-dark">
+            <button class="btn btn-sm btn-outline-dark" onclick="openShareModal('{{ station.doc_id }}', '{{ station.nombre }}')">
               <i class="fas fa-share me-1"></i>Enviar
-            </a>
+            </button>
             <a href="{{ url_for('main.delete_station', station_id=station.doc_id) }}" class="btn btn-sm btn-danger">
               <i class="fas fa-trash me-1"></i>Eliminar
             </a>
@@ -476,6 +497,32 @@
     </div>
   </div>
   
+  <!-- Modal para compartir estación -->
+  <div class="modal fade" id="modalShareEstacion" tabindex="-1" aria-labelledby="modalShareEstacionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalShareEstacionLabel">Compartir Estación</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <p id="shareStationName" class="mb-3">Compartir enlace de la estación: <strong></strong></p>
+          <div class="share-link-container">
+            <input type="text" id="shareLink" class="share-link" readonly>
+            <button class="btn btn-primary copy-btn" onclick="copyShareLink()">
+              <i class="fas fa-copy"></i>
+            </button>
+          </div>
+          <div class="d-grid gap-2 mt-3">
+            <a id="openLinkBtn" href="#" target="_blank" class="btn btn-primary">
+              <i class="fas fa-external-link-alt me-2"></i>Abrir enlace
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <!-- Bootstrap Bundle JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   
@@ -521,6 +568,34 @@
           select.value = audioInterface;
         }
       }, 500);
+    }
+    
+    // Función para abrir el modal de compartir
+    function openShareModal(stationId, stationName) {
+      const shareLink = `${window.location.origin}/public_listen/${stationId}`;
+      
+      document.getElementById('shareStationName').querySelector('strong').textContent = stationName;
+      document.getElementById('shareLink').value = shareLink;
+      document.getElementById('openLinkBtn').href = shareLink;
+      
+      const shareModal = new bootstrap.Modal(document.getElementById('modalShareEstacion'));
+      shareModal.show();
+    }
+    
+    // Función para copiar el enlace al portapapeles
+    function copyShareLink() {
+      const shareLink = document.getElementById('shareLink');
+      shareLink.select();
+      document.execCommand('copy');
+      
+      // Mostrar feedback al usuario
+      const copyBtn = document.querySelector('.copy-btn');
+      const originalHtml = copyBtn.innerHTML;
+      copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+      
+      setTimeout(() => {
+        copyBtn.innerHTML = originalHtml;
+      }, 2000);
     }
     
     // Función para manejar dispositivos de audio
